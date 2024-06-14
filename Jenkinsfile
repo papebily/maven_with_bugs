@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Get some code from a GitHub repository
-                git branch: params.BRANCHE , url: 'https://github.com/aymendr/maven_with_bugs.git'
+                git branch: params.BRANCHE , url: 'https://github.com/papebily/maven_with_bugs.git'
             }
         }
         stage('Checkout Code && Build Maven') {
@@ -24,22 +24,12 @@ pipeline {
                 }
             }
         }
-        /*stage('SonarQube Analysis') {
-            steps {
-                // Execute SonarQube analysis
-                script {
-                    withSonarQubeEnv('sonar_server') {
-                        sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-                    }
-                }
-            }
-        }*/ 
         stage('SonarQube Analysis') {
             steps {
                 // Execute SonarQube analysis
                 script {
-                    def scannerHome = tool 'sonar_scanner'
-                    withSonarQubeEnv('sonar_server') {
+                    def scannerHome = tool 'sonarscanner'
+                    withSonarQubeEnv('sonarqubeserver') {
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
                         -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/"
                     }
